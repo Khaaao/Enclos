@@ -18,7 +18,7 @@ public class Terrain extends JPanel{
 	static final Color couleurCheminBarre = Color.red;
 	static final int r = 20;
 	static final int d = 55;
-	static final int niveau = 3;
+	static final int niveau = 2;
 	
 	// Centre de notre Terrain
 	private Point centre = new Point(300, 300);

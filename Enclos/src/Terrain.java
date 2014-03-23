@@ -16,9 +16,9 @@ public class Terrain extends JPanel{
 	static final Color mouton1 = Color.orange;
 	static final Color mouton2 = Color.black;
 	static final Color couleurCheminBarre = Color.red;
-	static final int r = 20;
-	static final int d = 55;
-	static final int niveau = 2;
+	static final int r = 25;
+	static final int d = (int)(2.76 * r);
+	static final int niveau = 1;
 	
 	// Centre de notre Terrain
 	private Point centre = new Point(300, 300);
@@ -44,9 +44,6 @@ public class Terrain extends JPanel{
 		
 		/* === Etape 2 : Construction des chemins === */
 		preparationConstructionChemin();
-		
-		System.out.println(superIndice);
-		System.out.println(arChamps.get(superIndice + 1).getCentre().getX());
 	}
 	
 	// Dessine le terrain
@@ -208,11 +205,9 @@ public class Terrain extends JPanel{
 			}
 		}
 		
-		System.out.println("test");
 		// On stocke les chemins autour du 3è niveau
 		for(int i = superIndice; i < superIndice + (Terrain.niveau * 6); i++)
 		{
-			System.out.println("test");
 			int a = 0, b = 1, c = 3, d = 4;
 			for(int j = 0; j < 6; j++)
 			{
@@ -251,7 +246,6 @@ public class Terrain extends JPanel{
 			}
 		}
 	}
-
 }
 
 

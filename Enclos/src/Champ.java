@@ -1,6 +1,7 @@
 import java.awt.Polygon;
 import java.util.ArrayList;
 
+
 // JL
 public class Champ extends Polygon {
 	

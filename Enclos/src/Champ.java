@@ -1,7 +1,7 @@
 import java.awt.Polygon;
 import java.util.ArrayList;
 
-// CA MARCHEaa
+// JL
 public class Champ extends Polygon {
 	
 	private ArrayList<Chemin> chemins;
@@ -14,7 +14,6 @@ public class Champ extends Polygon {
 	{
 		this.centre = pPoint;
 		calculEmplacementChamp(centre);
-		
 	}
 	
 	/* Méthode servant à l'enregistrement de ses sommets */

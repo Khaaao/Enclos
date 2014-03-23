@@ -1,7 +1,7 @@
 import java.awt.Polygon;
 import java.util.ArrayList;
 
-// JL
+// JL 
 public class Champ extends Polygon {
 	
 	private ArrayList<Chemin> chemins;

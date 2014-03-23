@@ -18,10 +18,13 @@ public class Terrain extends JPanel{
 	static final Color couleurCheminBarre = Color.red;
 	static final int r = 20;
 	static final int d = 55;
-	static final int niveau = 4;
+	static final int niveau = 3;
 	
 	// Centre de notre Terrain
 	private Point centre = new Point(300, 300);
+	
+	// JOKER
+	private int superIndice = 0;
 	
 	private ArrayList<Champ> arChamps = new ArrayList<Champ>();
 	private ArrayList<Chemin> arChemins = new ArrayList<Chemin>();
@@ -42,31 +45,15 @@ public class Terrain extends JPanel{
 		/* === Etape 2 : Construction des chemins === */
 		preparationConstructionChemin();
 		
-		System.out.println(arChamps.get(0).getCoordonnesPointsDuChamp()[2].getX());
-		System.out.println(arChamps.get(0).getCoordonnesPointsDuChamp()[2].getY());
-		
-		
-//		System.out.println(arChemins.get(0).npoints);
-//		System.out.println(arChemins.get(1).xpoints[0]);
-//		System.out.println(arChemins.get(1).xpoints[1]);
-//		System.out.println(arChemins.get(1).xpoints[2]);
-//		System.out.println(arChemins.get(1).xpoints[3]);
-//		
-//		System.out.println();
-//		
-//		System.out.println(arChemins.get(1).ypoints[0]);
-//		System.out.println(arChemins.get(1).ypoints[1]);
-//		System.out.println(arChemins.get(1).ypoints[2]);
-//		System.out.println(arChemins.get(1).ypoints[3]);
-		
-		
+		System.out.println(superIndice);
+		System.out.println(arChamps.get(superIndice + 1).getCentre().getX());
 	}
 	
 	// Dessine le terrain
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
-		graphics.setColor(Color.LIGHT_GRAY);
+		graphics.setColor(Color.GREEN);
 		for(int i = 0; i < arChamps.size(); i++)
 			graphics.fillPolygon(arChamps.get(i));
 		
@@ -116,6 +103,10 @@ public class Terrain extends JPanel{
 				indiceSauvegarde++;
 			}
 			niveau++;
+			
+			// Nous servira ...
+			if(niveau == Terrain.niveau)
+				this.superIndice = indiceSauvegarde + 1;
 		}
 	}
 	
@@ -180,12 +171,13 @@ public class Terrain extends JPanel{
 	public void preparationConstructionChemin()
 	{
 		Chemin chemin;
+		
+		// Etape 1 On stocke les chemins autour des hexagones.
 		for(int j = 0; j < arChamps.size(); j++)
 		{
 			if(arChamps.get(j).getNbreVoisins() == 6)
 			{
 				int a = 4, b = 5, c = 1, d = 2;
-				
 				for(int i = 0; i < 6; i++)
 				{
 					chemin = new Chemin();
@@ -213,6 +205,49 @@ public class Terrain extends JPanel{
 					c++;
 					d++;
 				}
+			}
+		}
+		
+		System.out.println("test");
+		// On stocke les chemins autour du 3è niveau
+		for(int i = superIndice; i < superIndice + (Terrain.niveau * 6); i++)
+		{
+			System.out.println("test");
+			int a = 0, b = 1, c = 3, d = 4;
+			for(int j = 0; j < 6; j++)
+			{
+				chemin = new Chemin();
+				
+				if(a == 6)
+					a = 0;
+				if(b == 6)
+					b = 0;
+				if(c == 6)
+					c = 0;
+				if(d == 6)
+					d = 0;
+				
+				chemin.addPoint((int)arChamps.get(i).getVoisins().get(j).getCoordonnesPointsDuChamp()[a].getX(), (int)arChamps.get(i).getVoisins().get(j).getCoordonnesPointsDuChamp()[a].getY());
+				chemin.addPoint((int)arChamps.get(i).getVoisins().get(j).getCoordonnesPointsDuChamp()[b].getX(), (int)arChamps.get(i).getVoisins().get(j).getCoordonnesPointsDuChamp()[b].getY());
+				if(j != 5)
+				{
+					chemin.addPoint((int)arChamps.get(i).getVoisins().get(j + 1).getCoordonnesPointsDuChamp()[c].getX(), (int)arChamps.get(i).getVoisins().get(j + 1).getCoordonnesPointsDuChamp()[c].getY());
+					chemin.addPoint((int)arChamps.get(i).getVoisins().get(j + 1).getCoordonnesPointsDuChamp()[d].getX(), (int)arChamps.get(i).getVoisins().get(j + 1).getCoordonnesPointsDuChamp()[d].getY());
+				}
+				else
+				{
+					chemin.addPoint((int)arChamps.get(i).getVoisins().get(0).getCoordonnesPointsDuChamp()[c].getX(), (int)arChamps.get(i).getVoisins().get(0).getCoordonnesPointsDuChamp()[c].getY());
+					chemin.addPoint((int)arChamps.get(i).getVoisins().get(0).getCoordonnesPointsDuChamp()[d].getX(), (int)arChamps.get(i).getVoisins().get(0).getCoordonnesPointsDuChamp()[d].getY());
+				}
+				
+				
+				arChemins.add(chemin);
+				
+				a++;
+				b++;
+				c++;
+				d++;
+				
 			}
 		}
 	}

@@ -11,6 +11,14 @@ public class Champ extends Polygon {
 	private Point centre; // Coordonnées du centre du point
 	private boolean aUnMouton;
 	
+	public ArrayList<Champ> getVoisins() {
+		return voisins;
+	}
+
+	public Point[] getCoordonnesPointsDuChamp() {
+		return coordonnesPointsDuChamp;
+	}
+
 	public Champ(Point pPoint)
 	{
 		this.centre = pPoint;

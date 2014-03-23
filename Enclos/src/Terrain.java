@@ -37,10 +37,27 @@ public class Terrain extends JPanel{
 		arChamps.add(new Champ(centre));
 		for(Point point : arPoints) // ETAPE 2
 			arChamps.add(new Champ(point));
-		
-		//ajoutDesVoisins();  // ETAPE 3	
+		ajoutDesVoisins();  // ETAPE 3	
 		
 		/* === Etape 2 : Construction des chemins === */
+		preparationConstructionChemin();
+		
+		System.out.println(arChamps.get(0).getCoordonnesPointsDuChamp()[2].getX());
+		System.out.println(arChamps.get(0).getCoordonnesPointsDuChamp()[2].getY());
+		
+		
+//		System.out.println(arChemins.get(0).npoints);
+//		System.out.println(arChemins.get(1).xpoints[0]);
+//		System.out.println(arChemins.get(1).xpoints[1]);
+//		System.out.println(arChemins.get(1).xpoints[2]);
+//		System.out.println(arChemins.get(1).xpoints[3]);
+//		
+//		System.out.println();
+//		
+//		System.out.println(arChemins.get(1).ypoints[0]);
+//		System.out.println(arChemins.get(1).ypoints[1]);
+//		System.out.println(arChemins.get(1).ypoints[2]);
+//		System.out.println(arChemins.get(1).ypoints[3]);
 		
 		
 	}
@@ -52,6 +69,10 @@ public class Terrain extends JPanel{
 		graphics.setColor(Color.LIGHT_GRAY);
 		for(int i = 0; i < arChamps.size(); i++)
 			graphics.fillPolygon(arChamps.get(i));
+		
+		graphics.setColor(Color.YELLOW);
+		for(Chemin chemin : arChemins)
+			graphics.fillPolygon(chemin);
 	}
 	
 	/* Méthode servant au pivotement d'un point par rapport au centre */
@@ -155,6 +176,47 @@ public class Terrain extends JPanel{
 			}
 		}
 	}
+
+	public void preparationConstructionChemin()
+	{
+		Chemin chemin;
+		for(int j = 0; j < arChamps.size(); j++)
+		{
+			if(arChamps.get(j).getNbreVoisins() == 6)
+			{
+				int a = 4, b = 5, c = 1, d = 2;
+				
+				for(int i = 0; i < 6; i++)
+				{
+					chemin = new Chemin();
+					
+					if(a == 6)
+						a = 0;
+					if(b == 6)
+						b = 0;
+					if(c == 6)
+						c = 0;
+					if(d == 6)
+						d = 0;
+					
+					
+					chemin.addPoint((int)arChamps.get(j).getCoordonnesPointsDuChamp()[a].getX(), (int)arChamps.get(j).getCoordonnesPointsDuChamp()[a].getY());
+					chemin.addPoint((int)arChamps.get(j).getCoordonnesPointsDuChamp()[b].getX(), (int)arChamps.get(j).getCoordonnesPointsDuChamp()[b].getY());
+					chemin.addPoint((int)arChamps.get(j).getVoisins().get(i).getCoordonnesPointsDuChamp()[c].getX(), (int)arChamps.get(j).getVoisins().get(i).getCoordonnesPointsDuChamp()[c].getY());
+					chemin.addPoint((int)arChamps.get(j).getVoisins().get(i).getCoordonnesPointsDuChamp()[d].getX(), (int)arChamps.get(j).getVoisins().get(i).getCoordonnesPointsDuChamp()[d].getY());
+					
+					
+					this.arChemins.add(chemin);
+					
+					a++;
+					b++;
+					c++;
+					d++;
+				}
+			}
+		}
+	}
+
 }
 
 

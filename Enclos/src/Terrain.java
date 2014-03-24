@@ -11,26 +11,19 @@ import javax.swing.JPanel;
 public class Terrain extends JPanel{
 	
 	// Constantes
-	static final Color couleurChamp = Color.green;
-	static final Color couleurChemin = Color.yellow;
-	static final Color mouton1 = Color.orange;
-	static final Color mouton2 = Color.black;
-	static final Color couleurCheminBarre = Color.red;
-	static final int r = 25;
+	static final int r = 15;
 	static final int d = (int)(2.76 * r);
 	static final int niveau = 1;
 	
 	// Centre de notre Terrain
 	private Point centre = new Point(300, 300);
 	
-	// JOKER
-	private int superIndice = 0;
-	
 	private ArrayList<Champ> arChamps = new ArrayList<Champ>();
 	private ArrayList<Chemin> arChemins = new ArrayList<Chemin>();
 	
 	private ArrayList<Point> arPoints = new ArrayList<Point>();
 	private ArrayList<Point> arPointsCheck = new ArrayList<Point>();
+	private JeuEnclos enclos;
 	
 	public Terrain()
 	{
@@ -75,13 +68,14 @@ public class Terrain extends JPanel{
 	/* Méthode servant au dessin des hexagones voisins */
 	public void preparationDessinerVoisinsChamps(int pNiveau)
 	{
+		// On remplit les 6 prmeières cases de arPoints.
 		Point nCentre = centre; // Sera mis à jour 
 		Point point = new Point(nCentre.getX(), nCentre.getY() - d);
 		
 		int niveau = 1;
 		int indiceSauvegarde = 0; // Sert pour nos parcours
 		
-		// On stocke dans notre tableau les 6 premiers points + le centre
+		// On stocke dans arPoints les 6 points voisins du centre
 		preparationDessinerVoisinsChamps2(centre, point);
 		
 		while(niveau <= pNiveau)
@@ -100,10 +94,6 @@ public class Terrain extends JPanel{
 				indiceSauvegarde++;
 			}
 			niveau++;
-			
-			// Nous servira ...
-			if(niveau == Terrain.niveau)
-				this.superIndice = indiceSauvegarde + 1;
 		}
 	}
 	
@@ -205,8 +195,17 @@ public class Terrain extends JPanel{
 			}
 		}
 		
+		// On calcule l'indice de départ
+		int niveau = 1;
+		int indice = 1;
+		while(niveau < Terrain.niveau)
+		{
+			indice = indice + niveau * 6;
+			niveau++;
+		}
+		
 		// On stocke les chemins autour du 3è niveau
-		for(int i = superIndice; i < superIndice + (Terrain.niveau * 6); i++)
+		for(int i = indice; i < indice + Terrain.niveau * 6; i++)
 		{
 			int a = 0, b = 1, c = 3, d = 4;
 			for(int j = 0; j < 6; j++)

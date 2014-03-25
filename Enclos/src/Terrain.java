@@ -11,32 +11,32 @@ import javax.swing.JPanel;
 public class Terrain extends JPanel{
 	
 	// Constantes
-	static final int r = 15;
+	static final int r = 25;
 	static final int d = (int)(2.76 * r);
-	static final int niveau = 1;
+	static final int niveau = 2;
 	
 	// Centre de notre Terrain
 	private Point centre = new Point(300, 300);
 	
 	private ArrayList<Champ> arChamps = new ArrayList<Champ>();
-	private ArrayList<Chemin> arChemins = new ArrayList<Chemin>();
 	
 	private ArrayList<Point> arPoints = new ArrayList<Point>();
 	private ArrayList<Point> arPointsCheck = new ArrayList<Point>();
-	private JeuEnclos enclos;
 	
 	public Terrain()
 	{
 		/* === Etape1 : Construction des hexagones + leurs voisins === */
 		arPointsCheck.add(centre);
-		preparationDessinerVoisinsChamps(Terrain.niveau); // ETAPE 1
+		preparationDessinerVoisinsChamps(Terrain.niveau); // ETAPE 1 : on place les centres de chaque hexagone 
 		arChamps.add(new Champ(centre));
-		for(Point point : arPoints) // ETAPE 2
+		for(Point point : arPoints) // ETAPE 2 : On instancie les objets Champs selon les coordonnées des centres
 			arChamps.add(new Champ(point));
-		ajoutDesVoisins();  // ETAPE 3	
+		ajoutDesVoisins();  // ETAPE 3 : On identifie les voisins de chaque hexagone (6, 4 ou 3)
 		
 		/* === Etape 2 : Construction des chemins === */
 		preparationConstructionChemin();
+		
+		/* == Etape 3 : Lien placement des moutons selon le nbre de joueurs ===*/
 	}
 	
 	// Dessine le terrain
@@ -48,8 +48,9 @@ public class Terrain extends JPanel{
 			graphics.fillPolygon(arChamps.get(i));
 		
 		graphics.setColor(Color.YELLOW);
-		for(Chemin chemin : arChemins)
-			graphics.fillPolygon(chemin);
+		for(int i = 0; i < arChamps.size(); i++)
+			for(int j = 0; j < arChamps.get(i).getChemins().size(); j++)
+				graphics.fillPolygon(arChamps.get(i).getChemins().get(j));
 	}
 	
 	/* Méthode servant au pivotement d'un point par rapport au centre */
@@ -155,11 +156,13 @@ public class Terrain extends JPanel{
 		}
 	}
 
+	// On prépare les chemins et on les sauvegarde dans les champs
 	public void preparationConstructionChemin()
 	{
 		Chemin chemin;
+		Point pointCentre, pivot;
 		
-		// Etape 1 On stocke les chemins autour des hexagones.
+		// Etape 1 : On stocke les chemins autour des hexagones + sauvegarde les chemins dans les champs en question
 		for(int j = 0; j < arChamps.size(); j++)
 		{
 			if(arChamps.get(j).getNbreVoisins() == 6)
@@ -184,8 +187,7 @@ public class Terrain extends JPanel{
 					chemin.addPoint((int)arChamps.get(j).getVoisins().get(i).getCoordonnesPointsDuChamp()[c].getX(), (int)arChamps.get(j).getVoisins().get(i).getCoordonnesPointsDuChamp()[c].getY());
 					chemin.addPoint((int)arChamps.get(j).getVoisins().get(i).getCoordonnesPointsDuChamp()[d].getX(), (int)arChamps.get(j).getVoisins().get(i).getCoordonnesPointsDuChamp()[d].getY());
 					
-					
-					this.arChemins.add(chemin);
+					arChamps.get(j).ajoutChemin(chemin);
 					
 					a++;
 					b++;
@@ -193,55 +195,44 @@ public class Terrain extends JPanel{
 					d++;
 				}
 			}
-		}
-		
-		// On calcule l'indice de départ
-		int niveau = 1;
-		int indice = 1;
-		while(niveau < Terrain.niveau)
-		{
-			indice = indice + niveau * 6;
-			niveau++;
-		}
-		
-		// On stocke les chemins autour du 3è niveau
-		for(int i = indice; i < indice + Terrain.niveau * 6; i++)
-		{
-			int a = 0, b = 1, c = 3, d = 4;
-			for(int j = 0; j < 6; j++)
+			// On s'occupe des hexagones ayant 3 ou 4 voisins
+			else
 			{
-				chemin = new Chemin();
+				int a = 4, b = 5, c = 1, d = 2, indice = 0;
+				pointCentre = arChamps.get(j).getCentre();
+				pivot = new Point(arChamps.get(j).getCentre().getX(), arChamps.get(j).getCentre().getY() - Terrain.d);
+				int angle = 0;
 				
-				if(a == 6)
-					a = 0;
-				if(b == 6)
-					b = 0;
-				if(c == 6)
-					c = 0;
-				if(d == 6)
-					d = 0;
-				
-				chemin.addPoint((int)arChamps.get(i).getVoisins().get(j).getCoordonnesPointsDuChamp()[a].getX(), (int)arChamps.get(i).getVoisins().get(j).getCoordonnesPointsDuChamp()[a].getY());
-				chemin.addPoint((int)arChamps.get(i).getVoisins().get(j).getCoordonnesPointsDuChamp()[b].getX(), (int)arChamps.get(i).getVoisins().get(j).getCoordonnesPointsDuChamp()[b].getY());
-				if(j != 5)
+				for(int i = 0; i < 6; i++)
 				{
-					chemin.addPoint((int)arChamps.get(i).getVoisins().get(j + 1).getCoordonnesPointsDuChamp()[c].getX(), (int)arChamps.get(i).getVoisins().get(j + 1).getCoordonnesPointsDuChamp()[c].getY());
-					chemin.addPoint((int)arChamps.get(i).getVoisins().get(j + 1).getCoordonnesPointsDuChamp()[d].getX(), (int)arChamps.get(i).getVoisins().get(j + 1).getCoordonnesPointsDuChamp()[d].getY());
+					chemin = new Chemin();
+					
+					if(a == 6)
+						a = 0;
+					if(b == 6)
+						b = 0;
+					if(c == 6)
+						c = 0;
+					if(d == 6)
+						d = 0;
+					
+					if(estDansLeTableau(calculPivot(pointCentre, pivot, angle)))
+					{
+						chemin.addPoint((int)arChamps.get(j).getCoordonnesPointsDuChamp()[a].getX(), (int)arChamps.get(j).getCoordonnesPointsDuChamp()[a].getY());
+						chemin.addPoint((int)arChamps.get(j).getCoordonnesPointsDuChamp()[b].getX(), (int)arChamps.get(j).getCoordonnesPointsDuChamp()[b].getY());
+						chemin.addPoint((int)arChamps.get(j).getVoisins().get(indice).getCoordonnesPointsDuChamp()[c].getX(), (int)arChamps.get(j).getVoisins().get(indice).getCoordonnesPointsDuChamp()[c].getY());
+						chemin.addPoint((int)arChamps.get(j).getVoisins().get(indice).getCoordonnesPointsDuChamp()[d].getX(), (int)arChamps.get(j).getVoisins().get(indice).getCoordonnesPointsDuChamp()[d].getY());
+						
+						arChamps.get(j).ajoutChemin(chemin);
+						indice++;
+					}
+										
+					a++;
+					b++;
+					c++;
+					d++;
+					angle += 60;
 				}
-				else
-				{
-					chemin.addPoint((int)arChamps.get(i).getVoisins().get(0).getCoordonnesPointsDuChamp()[c].getX(), (int)arChamps.get(i).getVoisins().get(0).getCoordonnesPointsDuChamp()[c].getY());
-					chemin.addPoint((int)arChamps.get(i).getVoisins().get(0).getCoordonnesPointsDuChamp()[d].getX(), (int)arChamps.get(i).getVoisins().get(0).getCoordonnesPointsDuChamp()[d].getY());
-				}
-				
-				
-				arChemins.add(chemin);
-				
-				a++;
-				b++;
-				c++;
-				d++;
-				
 			}
 		}
 	}

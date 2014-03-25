@@ -1,6 +1,9 @@
+import java.awt.Polygon;
 
-public class Mouton {
+
+public class Mouton extends Polygon{
 	
-	private Terrain terrain;
 	private boolean bouge;
+	
+	
 }

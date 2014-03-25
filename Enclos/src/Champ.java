@@ -4,21 +4,13 @@ import java.util.ArrayList;
 
 // JL
 public class Champ extends Polygon {
-	
-	private ArrayList<Chemin> chemins;
+
+	private ArrayList<Chemin> chemins = new ArrayList<Chemin>();
 	private ArrayList<Champ> voisins = new ArrayList<Champ>();
 	private Point[] coordonnesPointsDuChamp = new Point[6]; // Va nous permettre d'avoir les coordonnées de chaque point d'un champ
 	private Point centre; // Coordonnées du centre du point
-	private boolean aUnMouton;
+	private Joueur aUnJoueur; // Sous entendu un mouton
 	
-	public ArrayList<Champ> getVoisins() {
-		return voisins;
-	}
-
-	public Point[] getCoordonnesPointsDuChamp() {
-		return coordonnesPointsDuChamp;
-	}
-
 	public Champ(Point pPoint)
 	{
 		this.centre = pPoint;
@@ -40,6 +32,14 @@ public class Champ extends Polygon {
 		}	
 	}
 	
+	public Point[] getCoordonnesPointsDuChamp() {
+		return coordonnesPointsDuChamp;
+	}
+
+	public ArrayList<Champ> getVoisins() {
+		return voisins;
+	}
+
 	/* Méthode permettant d'avoir le centre des six voisins de l'hexagone en question */
 	public void ajoutVoisinsCentreCoordonnees()
 	{
@@ -69,13 +69,24 @@ public class Champ extends Polygon {
 		return point;
 	}
 	
-	/* Méthode permettant d'ajouter un vosin à l'heagone courant */
+	/* Méthode permettant d'ajouter un voisin à l'hexagone courant */
 	public void ajoutVoisin(Point pPoint)
 	{
 		Champ champ = new Champ(pPoint);
 		voisins.add(champ);
 	}
 
+	/* Méthode d'ajout du chemin */
+	public void ajoutChemin(Chemin chemin)
+	{
+		this.chemins.add(chemin);
+	}
+	
+	
+	/*=== GETTERS ===*/
+	public ArrayList<Chemin> getChemins() {
+		return chemins;
+	}
 	
 	public Point getCentre() {
 		return centre;
@@ -86,10 +97,8 @@ public class Champ extends Polygon {
 		return  voisins.size();
 	}
 	
-	public void ajoutChemin()
-	{
-		
-	}
+	
+	/*=== SETTERS ===*/
 }
 
 

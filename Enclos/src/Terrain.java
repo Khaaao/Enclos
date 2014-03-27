@@ -17,9 +17,8 @@ public class Terrain extends JPanel{
 	
 	// Centre de notre Terrain
 	private Point centre = new Point(300, 300);
-	
 	private ArrayList<Champ> arChamps = new ArrayList<Champ>();
-	
+	private ArrayList<Joueur> arJoueurs = new ArrayList<Joueur>();
 	private ArrayList<Point> arPoints = new ArrayList<Point>();
 	private ArrayList<Point> arPointsCheck = new ArrayList<Point>();
 	
@@ -27,30 +26,51 @@ public class Terrain extends JPanel{
 	{
 		/* === Etape1 : Construction des hexagones + leurs voisins === */
 		arPointsCheck.add(centre);
-		preparationDessinerVoisinsChamps(Terrain.niveau); // ETAPE 1 : on place les centres de chaque hexagone 
+		preparationDessinerVoisinsChamps(Terrain.niveau); // ETAPE 1.1 : on place les centres de chaque hexagone 
 		arChamps.add(new Champ(centre));
-		for(Point point : arPoints) // ETAPE 2 : On instancie les objets Champs selon les coordonnées des centres
+		for(Point point : arPoints) // ETAPE 1.2 : On instancie les objets Champs selon les coordonnées des centres
 			arChamps.add(new Champ(point));
-		ajoutDesVoisins();  // ETAPE 3 : On identifie les voisins de chaque hexagone (6, 4 ou 3)
+		ajoutDesVoisins();  // ETAPE 1.3 : On identifie les voisins de chaque hexagone (6, 4 ou 3)
 		
 		/* === Etape 2 : Construction des chemins === */
 		preparationConstructionChemin();
 		
-		/* == Etape 3 : Lien placement des moutons selon le nbre de joueurs ===*/
+		/* == Etape 3 : Placement des moutons selon le nbre de joueurs ===*/
+		
+		// On crée 2 joueurs  qui auront chacun 3 moutons
+		arJoueurs.add(new Joueur("forsain", "jl"));
+		arJoueurs.add(new Joueur("khao", "kevin"));
+		placementPions();
+		
 	}
 	
 	// Dessine le terrain
 	public void paintComponent(Graphics graphics)
 	{
+		// Hexagones
 		super.paintComponent(graphics);
 		graphics.setColor(Color.GREEN);
 		for(int i = 0; i < arChamps.size(); i++)
 			graphics.fillPolygon(arChamps.get(i));
 		
+		// Chemins
 		graphics.setColor(Color.YELLOW);
 		for(int i = 0; i < arChamps.size(); i++)
 			for(int j = 0; j < arChamps.get(i).getChemins().size(); j++)
 				graphics.fillPolygon(arChamps.get(i).getChemins().get(j));
+		
+		// Moutons
+		for(int i = 0; i < arJoueurs.size(); i++)
+		{
+			for(int j= 0; j < arJoueurs.get(i).getListeMoutons().size(); j++)
+			{
+				if(arJoueurs.get(i).getId() == 1)
+					graphics.setColor(Color.ORANGE);
+				else
+					graphics.setColor(Color.RED);
+				drawCircle(graphics, arJoueurs.get(i).getListeMoutons().get(j).getCentre());
+			}
+		}
 	}
 	
 	/* Méthode servant au pivotement d'un point par rapport au centre */
@@ -222,7 +242,6 @@ public class Terrain extends JPanel{
 						chemin.addPoint((int)arChamps.get(j).getCoordonnesPointsDuChamp()[b].getX(), (int)arChamps.get(j).getCoordonnesPointsDuChamp()[b].getY());
 						chemin.addPoint((int)arChamps.get(j).getVoisins().get(indice).getCoordonnesPointsDuChamp()[c].getX(), (int)arChamps.get(j).getVoisins().get(indice).getCoordonnesPointsDuChamp()[c].getY());
 						chemin.addPoint((int)arChamps.get(j).getVoisins().get(indice).getCoordonnesPointsDuChamp()[d].getX(), (int)arChamps.get(j).getVoisins().get(indice).getCoordonnesPointsDuChamp()[d].getY());
-						
 						arChamps.get(j).ajoutChemin(chemin);
 						indice++;
 					}
@@ -236,6 +255,39 @@ public class Terrain extends JPanel{
 			}
 		}
 	}
+
+	public void placementPions()
+	{
+		for(int i = 1; i < 7; i++)
+		{
+			if(i%2 == 0)
+				arJoueurs.get(0).ajouterMouton(new Mouton(arChamps.get(i).getCentre()));
+			else
+				arJoueurs.get(1).ajouterMouton(new Mouton(arChamps.get(i).getCentre()));
+		}
+	}
+	
+
+	public void drawCircle(Graphics cg, Point point) {
+        cg.fillOval((int)point.getX()-(Terrain.r -10),(int)point.getY()-(Terrain.r -10), 2*(Terrain.r -10), 2*(Terrain.r -10));
+    }
+	
+	// Méthode servant à savoir si qaund on clique les corrdonées sont dans le cercle
+	public boolean inCircle(int circleX, int circleY, int clickX, int clickY, int radius){
+		return java.lang.Math.pow((circleX+radius - clickX),2) + java.lang.Math.pow((circleY+radius -clickY),2) < java.lang.Math.pow(radius,2);
+	}
+	
+	/*=== ACCESSEURS ===*/
+	public ArrayList<Champ> getArChamps() {
+		return arChamps;
+	}
+
+	public void setArChamps(ArrayList<Champ> arChamps) {
+		this.arChamps = arChamps;
+	}
+	
 }
+
+
 
 

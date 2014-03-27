@@ -13,7 +13,7 @@ Jean-Luc :
 
 - Termnier l'ajout des chemins (enlever les duplications) -> DONE
 - Optimisation du terrain -> DONE (Il faut que TOUT le terrain soit contenu dans la JFrame sous peine d'avoir un terrain incomplet)
-- Mettre en place les moutons -> 0.5 jour
+- Mettre en place des moutons -> DONE
 - Gérer les déplacements + barrières -> 2 jours 
 - Avoir des parties à 3, 4 ,5 joueurs -> 5 jours
 - Nbre de moutons -> 5 jours

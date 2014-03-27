@@ -17,13 +17,13 @@ public class MenuPrincipal extends JFrame{
 	
 	public MenuPrincipal(){
 	    this.setTitle("Jeu de l'enclos");
-	    this.setSize(700, 800);
+	    this.setSize(700, 750);
 	    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    this.setLocationRelativeTo(null);
 	    this.setResizable(false);
 	    
 	    JPanel panIcon = new JPanel();
-	    panIcon.setBackground(Color.white);
+	    panIcon.setBackground(Color.WHITE);
 	    panIcon.setLayout(new BorderLayout());
 	    panIcon.add(icon);
 	    

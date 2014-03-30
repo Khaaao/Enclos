@@ -1,7 +1,7 @@
 package vue;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-
+ 
 public class Dialog extends JDialog {
 	public Dialog(JFrame parent, String title, boolean modal){
 	    //On appelle le construteur de JDialog correspondant

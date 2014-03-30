@@ -10,7 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
+ 
 public class MenuPrincipal extends JFrame{
 	
 	private JButton launchButton = new JButton("Jouer"), h2hButton = new JButton("Head To Head"), quitButton = new JButton("Quitter");

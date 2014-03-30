@@ -24,7 +24,7 @@ public class Arbitre {
 	}
 	
 	public void changerJoueur()
-	{
+	{ 
 		
 	}
 	

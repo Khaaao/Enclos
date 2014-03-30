@@ -4,8 +4,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-
-// JL
 public class Champ extends Polygon {
 
 	private ArrayList<Chemin> chemins = new ArrayList<Chemin>();

@@ -7,7 +7,7 @@ public class TerrainControleur {
 	
 	private TerrainModele terrainModele;
 	private Arbitre arbitre; // Va nous aider à mieux aiguiller les actions à utiliser sur le modèle
-	
+	 
 	public TerrainControleur(TerrainModele pModele)
 	{
 		this.terrainModele = pModele;

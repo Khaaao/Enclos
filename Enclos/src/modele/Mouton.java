@@ -1,6 +1,6 @@
 package modele;
 import java.awt.Polygon;
-
+ 
 
 public class Mouton extends Polygon{
 	

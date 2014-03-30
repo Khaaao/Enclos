@@ -39,10 +39,6 @@ public class Arbitre {
 		
 	}
 	
-	public void finDePartie()
-	{
-		
-	}
 	
 	public Joueur getJoueurActif()
 	{
@@ -117,4 +113,12 @@ public class Arbitre {
 		else
 			this.modele.getArJoueurs().get(joueur.getId()).setEstActif(true);
 	}
+	
+	public boolean verifieSiFinDePartie()
+	{
+		boolean finDePartie = false;
+		return finDePartie;
+	}
+	
+	
 }

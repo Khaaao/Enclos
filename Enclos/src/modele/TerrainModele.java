@@ -1,7 +1,10 @@
 package modele;
  
+import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.Observable;
+
+import vue.Terrain;
 
 
 public class TerrainModele extends Observable{
@@ -494,5 +497,23 @@ public class TerrainModele extends Observable{
 			i++;
 		}
 		return indiceTrouve;
+	}
+
+	public Polygon fondNoir()
+	{
+		Polygon fondNoir = new Polygon();
+		Point point = new Point(300, 300);
+		int angle = 0;
+		int distance = 300 - TerrainModele.d * (niveau+1);
+		Point pointDepart = new Point(300, distance);
+		Point stock;
+		for(int i =0; i < 6; i++)
+		{
+			stock = calculPivot(point, pointDepart, angle);
+			fondNoir.addPoint((int)stock.getX(), (int)stock.getY());
+			angle += 60;
+		}
+		
+		return fondNoir;
 	}
 }

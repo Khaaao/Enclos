@@ -19,8 +19,16 @@ public class PlateauJeu extends JPanel{
 	
 	public void paintComponent(Graphics graphics)
 	{
-		// Hexagones
+		
+		
+		
+		// Hexagones 
 		super.paintComponent(graphics);
+		
+		// Fond noir
+		graphics.setColor(Color.BLACK);
+		graphics.fillPolygon(this.modele.fondNoir());
+		
 		graphics.setColor(Color.GREEN);
 		for(int i = 0; i < modele.getArChamps().size(); i++)
 			graphics.fillPolygon(modele.getArChamps().get(i));

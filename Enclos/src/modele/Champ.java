@@ -26,6 +26,12 @@ public class Champ extends Polygon {
 		calculEmplacementChamp(centre);
 	}
 	
+	public Champ()
+	{
+		
+	}
+	
+	
 	/* Méthode servant à l'enregistrement de ses sommets */
 	public void calculEmplacementChamp(Point pPoint)
 	{

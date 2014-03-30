@@ -27,19 +27,38 @@ public class TerrainControleur {
 				{
 					this.arbitre.valideEtapes(etape, joueur);
 					this.arbitre.sauvegardeIndiceMoutonADeplacer(terrainModele.pickMouton(joueur, x, y));
+					System.out.println("Mouton sélectionné");
 				}
+				else if(terrainModele.pickMouton(joueur, x, y) == -1)
+					System.out.println("Vous n'avez pas sélectionné un de vos moutons");
+				else
+					System.out.println("Ce mouton ne peut aller nulle part. Veuillez en choisir un autre.");
 			break;
 			
 			case 2:
-				if(terrainModele.pickVoisin(joueur, this.arbitre.getSauvegardeIndiceMoutonADeplacer(), x, y))
+				if(terrainModele.pickVoisin(joueur, this.arbitre.getSauvegardeIndiceMoutonADeplacer(), x, y) == 1)
+				{
 					this.arbitre.valideEtapes(etape, joueur);
+					System.out.println("Déplacement validé");
+				}
+				else if(terrainModele.pickVoisin(joueur, this.arbitre.getSauvegardeIndiceMoutonADeplacer(), x, y) == -1)
+					System.out.println("Déplacement non autorisé : Le chemin est bloqué !");
+				else if(terrainModele.pickVoisin(joueur, this.arbitre.getSauvegardeIndiceMoutonADeplacer(), x, y) == -2)
+					System.out.println("Déplacement non autorisé : La case est déjà occupé par un mouton");
+				else
+					System.out.println("Déplacement non autorisé : Choisissez une case voisine à celle sélectionnée !");
 			break;
 			case 3:
-				if(terrainModele.pickChemin(x, y))
+				if(terrainModele.pickChemin(x, y) == 1)
 				{
 					this.arbitre.valideEtapes(etape, joueur);
 					this.arbitre.passeLaMainAuJoueurSuivant(joueur);
+					System.out.println("Blocage d'un chemin");
 				}
+				else if(terrainModele.pickChemin(x, y) == -1)
+					System.out.println("Le chemin est déjà bloqué !");
+				else 
+					System.out.println("Veuillez choisir un chemin à bloquer !");
 			break;
 			
 			default:
@@ -47,12 +66,6 @@ public class TerrainControleur {
 			
 	}
 	
-	// On notifie le modèle
-	public void control()
-	{
-		
-	}
-
 	// Nous sert pour le JPanel
 	public TerrainModele getTerrainModele() {
 		return terrainModele;

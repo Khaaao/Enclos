@@ -257,68 +257,87 @@ public class TerrainModele extends Observable{
 		return Math.sqrt(Math.pow(circleX - clickX, 2) + Math.pow(circleY - clickY, 2)) <= radius;
 	}
 	
-	// Méthode retournant vrai/faux selon que le joueur a choisi ou pas son mouton
+	// Méthode retournant un entier selon que le joueur a choisi ou pas son mouton
 	public int pickMouton(Joueur joueur, int x, int y)
 	{
-		for(int i = 0; i < joueur.getListeMoutons().size(); i++)
+		int j = 0;
+		int indiceMoutonTouve = -1;
+		boolean trouve = false;
+		
+		while(!trouve && j < joueur.getListeMoutons().size())
 		{
-			if(inCircle((int)joueur.getListeMoutons().get(i).getCentre().getX(), (int)joueur.getListeMoutons().get(i).getCentre().getY(), x, y, TerrainModele.r - 10))
-				return i;
+			if(inCircle((int)joueur.getListeMoutons().get(j).getCentre().getX(), (int)joueur.getListeMoutons().get(j).getCentre().getY(), x, y, TerrainModele.r - 10))
+			{
+				trouve = true;
+				indiceMoutonTouve = j;
+			}
+			j++;
 		}
-		return -1;
+		
+		if(indiceMoutonTouve == -1) // Pour dire que l'on a pas trouvé le mouton
+			return -1;
+		if(moutonBloque(joueur.getListeMoutons().get(indiceMoutonTouve).getCentre())) // Pour dire que ca sert à rien de sélectionner le mouton
+			return -2;
+		// La sélection est valide
+		return indiceMoutonTouve;
 	}
 	
-	// Méthode retournant vrai/faux selon le déplacement du mouton
-	public boolean pickVoisin(Joueur joueurCourant, int indiceMoutonChoisi, int x, int y)
+	// Méthode retournant un entier selon le déplacement du mouton
+	public int pickVoisin(Joueur joueurCourant, int indiceMoutonChoisi, int x, int y)
 	{
-		int p = 0;
-		int indiceARetenir = 0;
-		boolean trouveCentre = false;
+		int resultat = 0;
 		
-		//1. On cherche dans le tableau champ, le champ correspond aux coordonnées du centre du mouton
-		Point centreM = joueurCourant.getListeMoutons().get(indiceMoutonChoisi).getCentre();
-		while(!trouveCentre && p < arChamps.size())
-		{
-			if(egalitePoints(centreM, arChamps.get(p).getCentre()))
-			{
-				indiceARetenir = p;
-				trouveCentre = true;
-			}
-			p++;
-		}
+		//1. On cherche dans le tableau champ, le champ correspondant aux coordonnées du centre du mouton
+		int indiceARetenir = recuperationIndice(joueurCourant.getListeMoutons().get(indiceMoutonChoisi).getCentre());
 		
 		//2. parcourt la liste des voisins du champ
 		int l = 0;
 		boolean trouve = false;
+		boolean majMouton = false;
 		while(l < arChamps.get(indiceARetenir).getVoisins().size() && !trouve)
 		{
 			// Si le clic est contenu dans un des voisins du mouton/champ
 			if(arChamps.get(indiceARetenir).getVoisins().get(l).contains(x, y))
 			{
-				// Si le chemin n'est pas bloqué et que la case souhaité n'est pas occupé par un joueur
-				if(!arChamps.get(indiceARetenir).getChemins().get(l).isBloque() && !arChamps.get(indiceARetenir).getVoisins().get(l).getaUnJoueur())
+				// Si le chemin menant à ce champ n'est pas bloqué et que la case souhaité n'est pas occupé par un joueur
+				if(!arChamps.get(indiceARetenir).getChemins().get(l).isBloque() && !voisinOccupe(arChamps.get(indiceARetenir).getVoisins().get(l).getCentre()))
 				{
-					// Le centre du mouton est mis à jour
+					// Le centre du mouton du joueur est mis à jour
 					joueurCourant.getListeMoutons().get(indiceMoutonChoisi).setCentre(arChamps.get(indiceARetenir).getVoisins().get(l).getCentre());
-					trouve = true;
+					// On met à jour le tableau de champ en précisant que la nouvelle case est occupe par un joueur et que l'ancienne est libre
+					arChamps.get(indiceARetenir).setAUnJoueur(false);
+					arChamps.get(recuperationIndice(arChamps.get(indiceARetenir).getVoisins().get(l).getCentre())).setAUnJoueur(true);
+					
+					setChanged();
+					notifyObservers();
+					
+					majMouton = true;
+					resultat = 1; // Tout est OK
 				}
+				else
+				{
+					if(arChamps.get(indiceARetenir).getChemins().get(l).isBloque())
+						resultat = -1; // 
+					else
+						resultat = -2;
+				}
+				trouve = true;
 			}
 			l++;
 		}
 		
-		if(trouve)
+		if(majMouton)
 		{
 			// On notifie à notre vue qu'un des pions du joueur a changé de place !
 			setChanged();
 			notifyObservers();
-			return true;
 		}
-		else
-			return false;
+		return resultat;
 	}
 	
-	public boolean pickChemin(int x, int y)
+	public int pickChemin(int x, int y)
 	{
+		int resultat = 0;
 		int m = 0;
 		int n;
 		boolean trouveChemin = false;
@@ -326,16 +345,13 @@ public class TerrainModele extends Observable{
 		// Parcours des champs
 		while(m < arChamps.size())
 		{
-			System.out.println(m);
 			// Parcours des chemins d'un champ
 			n = 0;
 			while(n < arChamps.get(m).getChemins().size() && !trouveChemin)
 			{
-				System.out.println("test");
 				// Si le point cliqué est contenu dans un chemin et qu'il n'est pas bloqué
 				if(arChamps.get(m).getChemins().get(n).contains(x, y) && !arChamps.get(m).getChemins().get(n).isBloque())
 				{
-					System.out.println("test2");
 					// Modification du chemin en rouge
 					arChamps.get(m).getChemins().get(n).setBloque(true);
 					miseAJourChemins(x, y);
@@ -344,13 +360,19 @@ public class TerrainModele extends Observable{
 					// MàJ des vues
 					setChanged();
 					notifyObservers();
+					resultat = 1;
+				}
+				// On a trouvé le chemin mais il est déjà bloqué !
+				else if(arChamps.get(m).getChemins().get(n).contains(x, y) && arChamps.get(m).getChemins().get(n).isBloque())
+				{
+					trouveChemin = true;
+					resultat = -1;
 				}
 				n++;
 			}
 			m++;
 		}
-		System.out.println(trouveChemin);
-		return trouveChemin;
+		return resultat;
 	}
 	// Méthode testant l'égalité entre 2 points
 	public boolean egalitePoints(Point point, Point point2)
@@ -402,5 +424,74 @@ public class TerrainModele extends Observable{
 		this.arJoueurs = arJoueurs;
 		setChanged();
 		notifyObservers();
+	}
+
+	public boolean moutonBloque(Point pPoint)
+	{
+		//1. On cherche le champ corespondant au centre du mouton
+		boolean trouve = false;
+		int i = 0;
+		Champ champ = new Champ();
+		while(i < arChamps.size() && !trouve)
+		{
+			if(egalitePoints(pPoint, arChamps.get(i).getCentre()))
+			{
+				champ = arChamps.get(i);
+				trouve = true;
+			}
+			i++;
+		}
+		
+		//2. On détermine si à partir de ce champ on peut aller où on veut
+		return voisinsBloqueMouton(champ);
+	}
+	
+	public boolean voisinsBloqueMouton(Champ champ)
+	{
+		int j = 0;
+		
+		// Parcours les voisins mais aussi les chemins du champ courant
+		for(int i = 0; i < champ.getNbreVoisins(); i++)
+			if(arChamps.get(recuperationIndice(champ.getVoisins().get(i).getCentre())).getaUnJoueur() || champ.getChemins().get(i).isBloque())
+				j++;
+		
+		if (j == champ.getNbreVoisins())
+			return true;
+		else
+			return false;
+	}
+	
+	public boolean voisinOccupe(Point point)
+	{
+		int i = 0;
+		boolean trouve = false;
+		while(i < arChamps.size() && !trouve)
+		{
+			if(egalitePoints(point, arChamps.get(i).getCentre()))
+				if(arChamps.get(i).getaUnJoueur())
+					return true;
+			
+			i++;
+		}
+		
+		return false;
+	}
+	
+	// Cette méthode récupère l'indice d'un champ à partir du centre envoyé en paramètre 
+	public int recuperationIndice(Point point)
+	{
+		int i = 0;
+		int indiceTrouve = -1;
+		boolean trouve = false;
+		while(i < arChamps.size() && !trouve)
+		{
+			if(egalitePoints(point, arChamps.get(i).getCentre()))
+			{
+				trouve = true;
+				indiceTrouve = i;
+			}			
+			i++;
+		}
+		return indiceTrouve;
 	}
 }

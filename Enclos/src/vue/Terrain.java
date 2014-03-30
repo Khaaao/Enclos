@@ -87,7 +87,6 @@ public class Terrain extends JFrame implements Observer, MouseListener, KeyListe
 	@Override
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
-		System.out.println("MISE A JOUR");
 		repaint();
 	}
 }

@@ -1,32 +1,42 @@
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.lang.reflect.Array;
+package modele;
+
 import java.util.ArrayList;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import java.util.Observable;
 
 
-public class Terrain extends JPanel{
+public class TerrainModele extends Observable{
 	
-	// Constantes
-	static final int r = 25;
+	public static final int r = 25;
 	static final int d = (int)(2.76 * r);
 	static final int niveau = 2;
 	
-	// Centre de notre Terrain
 	private Point centre = new Point(300, 300);
 	private ArrayList<Champ> arChamps = new ArrayList<Champ>();
 	private ArrayList<Joueur> arJoueurs = new ArrayList<Joueur>();
 	private ArrayList<Point> arPoints = new ArrayList<Point>();
 	private ArrayList<Point> arPointsCheck = new ArrayList<Point>();
 	
-	public Terrain()
+	public void ajouterJoueur()
 	{
-		/* === Etape1 : Construction des hexagones + leurs voisins === */
+		Joueur joueur = new Joueur("FORSAIN", "Jean-Luc");
+		Joueur joueur2 = new Joueur("KHAO", "Kévin");
+		
+		this.arJoueurs.add(joueur);
+		this.arJoueurs.add(joueur2);
+		
+		this.arJoueurs.get(0).setEstActif(true);
+	}
+	
+	public TerrainModele()
+	{
+		ajouterJoueur();
+	}
+	
+	/* Méthode servant à la génération du terrain */
+	public void generationTerrain()
+	{
 		arPointsCheck.add(centre);
-		preparationDessinerVoisinsChamps(Terrain.niveau); // ETAPE 1.1 : on place les centres de chaque hexagone 
+		preparationDessinerVoisinsChamps(TerrainModele.niveau); // ETAPE 1.1 : on place les centres de chaque hexagone 
 		arChamps.add(new Champ(centre));
 		for(Point point : arPoints) // ETAPE 1.2 : On instancie les objets Champs selon les coordonnées des centres
 			arChamps.add(new Champ(point));
@@ -35,42 +45,9 @@ public class Terrain extends JPanel{
 		/* === Etape 2 : Construction des chemins === */
 		preparationConstructionChemin();
 		
-		/* == Etape 3 : Placement des moutons selon le nbre de joueurs ===*/
-		
-		// On crée 2 joueurs  qui auront chacun 3 moutons
-		arJoueurs.add(new Joueur("forsain", "jl"));
-		arJoueurs.add(new Joueur("khao", "kevin"));
+		/* === Etape 3 : Mise en place des pions des deux joueurs */
 		placementPions();
 		
-	}
-	
-	// Dessine le terrain
-	public void paintComponent(Graphics graphics)
-	{
-		// Hexagones
-		super.paintComponent(graphics);
-		graphics.setColor(Color.GREEN);
-		for(int i = 0; i < arChamps.size(); i++)
-			graphics.fillPolygon(arChamps.get(i));
-		
-		// Chemins
-		graphics.setColor(Color.YELLOW);
-		for(int i = 0; i < arChamps.size(); i++)
-			for(int j = 0; j < arChamps.get(i).getChemins().size(); j++)
-				graphics.fillPolygon(arChamps.get(i).getChemins().get(j));
-		
-		// Moutons
-		for(int i = 0; i < arJoueurs.size(); i++)
-		{
-			for(int j= 0; j < arJoueurs.get(i).getListeMoutons().size(); j++)
-			{
-				if(arJoueurs.get(i).getId() == 1)
-					graphics.setColor(Color.ORANGE);
-				else
-					graphics.setColor(Color.RED);
-				drawCircle(graphics, arJoueurs.get(i).getListeMoutons().get(j).getCentre());
-			}
-		}
 	}
 	
 	/* Méthode servant au pivotement d'un point par rapport au centre */
@@ -162,7 +139,7 @@ public class Terrain extends JPanel{
 		for(int i = 0; i < arChamps.size(); i++)
 		{
 			champ = arChamps.get(i);
-			point = new Point(arChamps.get(i).getCentre().getX(), arChamps.get(i).getCentre().getY() - Terrain.d);
+			point = new Point(arChamps.get(i).getCentre().getX(), arChamps.get(i).getCentre().getY() - TerrainModele.d);
 			j = 0;
 			angle = 0;
 			
@@ -174,6 +151,8 @@ public class Terrain extends JPanel{
 				j++;
 			}
 		}
+		
+		
 	}
 
 	// On prépare les chemins et on les sauvegarde dans les champs
@@ -220,7 +199,7 @@ public class Terrain extends JPanel{
 			{
 				int a = 4, b = 5, c = 1, d = 2, indice = 0;
 				pointCentre = arChamps.get(j).getCentre();
-				pivot = new Point(arChamps.get(j).getCentre().getX(), arChamps.get(j).getCentre().getY() - Terrain.d);
+				pivot = new Point(arChamps.get(j).getCentre().getX(), arChamps.get(j).getCentre().getY() - TerrainModele.d);
 				int angle = 0;
 				
 				for(int i = 0; i < 6; i++)
@@ -261,33 +240,167 @@ public class Terrain extends JPanel{
 		for(int i = 1; i < 7; i++)
 		{
 			if(i%2 == 0)
+			{
 				arJoueurs.get(0).ajouterMouton(new Mouton(arChamps.get(i).getCentre()));
+				arChamps.get(i).setAUnJoueur(true);
+			}
 			else
+			{
 				arJoueurs.get(1).ajouterMouton(new Mouton(arChamps.get(i).getCentre()));
+				arChamps.get(i).setAUnJoueur(true);
+			}
 		}
 	}
 	
-
-	public void drawCircle(Graphics cg, Point point) {
-        cg.fillOval((int)point.getX()-(Terrain.r -10),(int)point.getY()-(Terrain.r -10), 2*(Terrain.r -10), 2*(Terrain.r -10));
-    }
-	
 	// Méthode servant à savoir si qaund on clique les corrdonées sont dans le cercle
 	public boolean inCircle(int circleX, int circleY, int clickX, int clickY, int radius){
-		return java.lang.Math.pow((circleX+radius - clickX),2) + java.lang.Math.pow((circleY+radius -clickY),2) < java.lang.Math.pow(radius,2);
+		return Math.sqrt(Math.pow(circleX - clickX, 2) + Math.pow(circleY - clickY, 2)) <= radius;
 	}
 	
-	/*=== ACCESSEURS ===*/
+	// Méthode retournant vrai/faux selon que le joueur a choisi ou pas son mouton
+	public int pickMouton(Joueur joueur, int x, int y)
+	{
+		for(int i = 0; i < joueur.getListeMoutons().size(); i++)
+		{
+			if(inCircle((int)joueur.getListeMoutons().get(i).getCentre().getX(), (int)joueur.getListeMoutons().get(i).getCentre().getY(), x, y, TerrainModele.r - 10))
+				return i;
+		}
+		return -1;
+	}
+	
+	// Méthode retournant vrai/faux selon le déplacement du mouton
+	public boolean pickVoisin(Joueur joueurCourant, int indiceMoutonChoisi, int x, int y)
+	{
+		int p = 0;
+		int indiceARetenir = 0;
+		boolean trouveCentre = false;
+		
+		//1. On cherche dans le tableau champ, le champ correspond aux coordonnées du centre du mouton
+		Point centreM = joueurCourant.getListeMoutons().get(indiceMoutonChoisi).getCentre();
+		while(!trouveCentre && p < arChamps.size())
+		{
+			if(egalitePoints(centreM, arChamps.get(p).getCentre()))
+			{
+				indiceARetenir = p;
+				trouveCentre = true;
+			}
+			p++;
+		}
+		
+		//2. parcourt la liste des voisins du champ
+		int l = 0;
+		boolean trouve = false;
+		while(l < arChamps.get(indiceARetenir).getVoisins().size() && !trouve)
+		{
+			// Si le clic est contenu dans un des voisins du mouton/champ
+			if(arChamps.get(indiceARetenir).getVoisins().get(l).contains(x, y))
+			{
+				// Si le chemin n'est pas bloqué et que la case souhaité n'est pas occupé par un joueur
+				if(!arChamps.get(indiceARetenir).getChemins().get(l).isBloque() && !arChamps.get(indiceARetenir).getVoisins().get(l).getaUnJoueur())
+				{
+					// Le centre du mouton est mis à jour
+					joueurCourant.getListeMoutons().get(indiceMoutonChoisi).setCentre(arChamps.get(indiceARetenir).getVoisins().get(l).getCentre());
+					trouve = true;
+				}
+			}
+			l++;
+		}
+		
+		if(trouve)
+		{
+			// On notifie à notre vue qu'un des pions du joueur a changé de place !
+			setChanged();
+			notifyObservers();
+			return true;
+		}
+		else
+			return false;
+	}
+	
+	public boolean pickChemin(int x, int y)
+	{
+		int m = 0;
+		int n;
+		boolean trouveChemin = false;
+		
+		// Parcours des champs
+		while(m < arChamps.size())
+		{
+			System.out.println(m);
+			// Parcours des chemins d'un champ
+			n = 0;
+			while(n < arChamps.get(m).getChemins().size() && !trouveChemin)
+			{
+				System.out.println("test");
+				// Si le point cliqué est contenu dans un chemin et qu'il n'est pas bloqué
+				if(arChamps.get(m).getChemins().get(n).contains(x, y) && !arChamps.get(m).getChemins().get(n).isBloque())
+				{
+					System.out.println("test2");
+					// Modification du chemin en rouge
+					arChamps.get(m).getChemins().get(n).setBloque(true);
+					miseAJourChemins(x, y);
+					trouveChemin = true;
+					
+					// MàJ des vues
+					setChanged();
+					notifyObservers();
+				}
+				n++;
+			}
+			m++;
+		}
+		System.out.println(trouveChemin);
+		return trouveChemin;
+	}
+	// Méthode testant l'égalité entre 2 points
+	public boolean egalitePoints(Point point, Point point2)
+	{
+		return ((int)point.getX() == (int)point2.getX()) && ((int)point.getY() == (int)point2.getY());
+	}
+	
+	public void miseAJourChemins(int x, int y)
+	{
+		int o = 0;
+		int p;
+		boolean trouveChemin = false;
+		
+		//Mise à jour des chemins concernés
+		while(o < arChamps.size() && !trouveChemin)
+		{
+			p = 0;
+			while(p < arChamps.get(o).getChemins().size() && !trouveChemin)
+			{
+				if(arChamps.get(o).getChemins().get(p).contains(x, y) && !arChamps.get(o).getChemins().get(p).isBloque())
+				{
+					// Modification de chemin
+					arChamps.get(o).getChemins().get(p).setBloque(true);
+					trouveChemin = true;
+				}
+				p++;
+			}
+			o++;
+		}
+	}
+	
+	
+	/* MUTATEURS */
 	public ArrayList<Champ> getArChamps() {
 		return arChamps;
 	}
 
 	public void setArChamps(ArrayList<Champ> arChamps) {
 		this.arChamps = arChamps;
+		setChanged();
+		notifyObservers();
 	}
-	
+
+	public ArrayList<Joueur> getArJoueurs() {
+		return arJoueurs;
+	}
+
+	public void setArJoueurs(ArrayList<Joueur> arJoueurs) {
+		this.arJoueurs = arJoueurs;
+		setChanged();
+		notifyObservers();
+	}
 }
-
-
-
-

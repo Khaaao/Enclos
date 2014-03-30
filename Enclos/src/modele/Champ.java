@@ -1,4 +1,7 @@
+package modele;
 import java.awt.Polygon;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 
@@ -9,8 +12,16 @@ public class Champ extends Polygon {
 	private ArrayList<Champ> voisins = new ArrayList<Champ>();
 	private Point[] coordonnesPointsDuChamp = new Point[6]; // Va nous permettre d'avoir les coordonnées de chaque point d'un champ
 	private Point centre; // Coordonnées du centre du point
-	private Joueur aUnJoueur; // Sous entendu un mouton
+	private boolean aUnJoueur; // Sous entendu un mouton
 	
+	public boolean getaUnJoueur() {
+		return aUnJoueur;
+	}
+
+	public void setAUnJoueur(boolean aUnJoueur) {
+		this.aUnJoueur = aUnJoueur;
+	}
+
 	public Champ(Point pPoint)
 	{
 		this.centre = pPoint;
@@ -23,11 +34,11 @@ public class Champ extends Polygon {
 		int i = 0;
 		for (i = 0; i < 6; i++) {
 			// On enregistre les sommets de l'hexagone
-			coordonnesPointsDuChamp[i] = new Point(pPoint.getX() + Terrain.r * Math.cos(i * 2 * Math.PI / 6), pPoint.getY() + Terrain.r * Math.sin(i * 2 * Math.PI / 6));
+			coordonnesPointsDuChamp[i] = new Point(pPoint.getX() + TerrainModele.r * Math.cos(i * 2 * Math.PI / 6), pPoint.getY() + TerrainModele.r * Math.sin(i * 2 * Math.PI / 6));
 			
 			this.addPoint(
-				(int)(pPoint.getX() + Terrain.r * Math.cos(i * 2 * Math.PI / 6)),
-				(int)(pPoint.getY() + Terrain.r * Math.sin(i * 2 * Math.PI / 6))
+				(int)(pPoint.getX() + TerrainModele.r * Math.cos(i * 2 * Math.PI / 6)),
+				(int)(pPoint.getY() + TerrainModele.r * Math.sin(i * 2 * Math.PI / 6))
 			);
 		}	
 	}
@@ -44,7 +55,7 @@ public class Champ extends Polygon {
 	public void ajoutVoisinsCentreCoordonnees()
 	{
 		// Instanciation
-		Point pointDepart = new Point(this.centre.getX(), this.centre.getY() - Terrain.d);
+		Point pointDepart = new Point(this.centre.getX(), this.centre.getY() - TerrainModele.d);
 		int angle = 0;
 		
 		// Calcule les centres des hexagones voisins
@@ -96,9 +107,6 @@ public class Champ extends Polygon {
 	{
 		return  voisins.size();
 	}
-	
-	
-	/*=== SETTERS ===*/
 }
 
 

@@ -1,8 +1,6 @@
+package vue;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -12,6 +10,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import modele.TerrainModele;
+import controleur.*;
 
 public class Menu extends JFrame{
 
@@ -31,19 +32,26 @@ public class Menu extends JFrame{
 	    
 	    JPanel control = new JPanel();
 	    control.setBackground(Color.BLACK);
-	    control.setLayout(new BoxLayout(control, BoxLayout.Y_AXIS));
+	    control.setLayout(new BoxLayout(control,BoxLayout.Y_AXIS));
 	    control.add(fastButton);
 	    control.add(resumeButton);
 	    control.add(profilButton);
 	    control.add(settingButton);
 	    control.add(cancelButton);
-	    this.getContentPane().add(control, BorderLayout.WEST);
+	    this.getContentPane().add(control, BorderLayout.EAST);
 	    this.getContentPane().add(panIcon, BorderLayout.CENTER);
 	    
 	    
 	    fastButton.addActionListener(new ActionListener(){
 	    	public void actionPerformed(ActionEvent arg0) {
-	    		JeuEnclos newfastgame = new JeuEnclos();
+	    		// Instanciation du modèle 
+	    		TerrainModele modele = new TerrainModele();
+	    		// Création du controleur lié au modèle
+	    		TerrainControleur controleur = new TerrainControleur(modele);
+	    		// Création de la fenetre avec le controleur en param
+	    		Terrain terrain = new Terrain(controleur);
+	    		// Ajout de la fenetre comme observer de notre modèle
+	    		modele.addObserver(terrain);
 	    		setVisible(false); 
 	    	}         
 	    });

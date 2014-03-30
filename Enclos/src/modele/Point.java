@@ -2,10 +2,10 @@ package modele;
  
 public class Point {
 	
-	private double x;
-	private double y;
+	private float x;
+	private float y;
 	
-	public Point(double pX, double pY)
+	public Point(float pX, float pY)
 	{
 		this.x = pX;
 		this.y = pY;
@@ -16,19 +16,19 @@ public class Point {
 		
 	}
 
-	public double getX() {
+	public float getX() {
 		return x;
 	}
 
-	public void setX(double x) {
+	public void setX(float x) {
 		this.x = x;
 	}
 
-	public double getY() {
+	public float getY() {
 		return y;
 	}
 
-	public void setY(double y) {
+	public void setY(float y) {
 		this.y = y;
 	}
 }

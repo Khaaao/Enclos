@@ -6,9 +6,9 @@ import java.util.Observable;
 
 public class TerrainModele extends Observable{
 	
-	public static final int r = 25;
+	public static final int r = 24;
 	static final int d = (int)(2.76 * r);
-	static final int niveau = 2;
+	static final int niveau = 3;
 	
 	private Point centre = new Point(300, 300);
 	private ArrayList<Champ> arChamps = new ArrayList<Champ>();
@@ -47,26 +47,25 @@ public class TerrainModele extends Observable{
 		
 		/* === Etape 3 : Mise en place des pions des deux joueurs */
 		placementPions();
-		
 	}
 	
 	/* Méthode servant au pivotement d'un point par rapport au centre */
 	public Point calculPivot(Point pPointCentre, Point pPoint, int angle)
 	{
 		Point point = new Point();
-		double a = Math.toRadians((double)angle);
+		double a = Math.toRadians(angle);
 		double x, y;
 		x = Math.cos(a) * (pPoint.getX() - pPointCentre.getX()) - Math.sin(a) * (pPoint.getY() - pPointCentre.getY()) + pPointCentre.getX();
 		y = Math.sin(a) * (pPoint.getX() - pPointCentre.getX()) + Math.cos(a) * (pPoint.getY() - pPointCentre.getY()) + pPointCentre.getY();
-		point.setX(x);
-		point.setY(y);
+		point.setX((float)x);
+		point.setY((float)y);
 		return point;
 	}
 	
 	/* Méthode servant au dessin des hexagones voisins */
 	public void preparationDessinerVoisinsChamps(int pNiveau)
 	{
-		// On remplit les 6 prmeières cases de arPoints.
+		// On remplit les 6 premières cases de arPoints.
 		Point nCentre = centre; // Sera mis à jour 
 		Point point = new Point(nCentre.getX(), nCentre.getY() - d);
 		
@@ -121,7 +120,7 @@ public class TerrainModele extends Observable{
 		int i = 0;
 		while(!trouve && i < arPointsCheck.size())
 		{
-			if((int)(arPointsCheck.get(i).getX()) == (int)(pPoint.getX()) && (int)(arPointsCheck.get(i).getY()) == (int)(pPoint.getY()))
+			if(((int)(arPointsCheck.get(i).getX()) == (int)(pPoint.getX())) && ((int)(arPointsCheck.get(i).getY()) == (int)(pPoint.getY())))
 				trouve = true;
 			i++;
 		}
@@ -136,6 +135,7 @@ public class TerrainModele extends Observable{
 		int angle;
 		int j;
 		
+		// Parcourt la liste des champs
 		for(int i = 0; i < arChamps.size(); i++)
 		{
 			champ = arChamps.get(i);
@@ -296,6 +296,7 @@ public class TerrainModele extends Observable{
 		boolean majMouton = false;
 		while(l < arChamps.get(indiceARetenir).getVoisins().size() && !trouve)
 		{
+			
 			// Si le clic est contenu dans un des voisins du mouton/champ
 			if(arChamps.get(indiceARetenir).getVoisins().get(l).contains(x, y))
 			{

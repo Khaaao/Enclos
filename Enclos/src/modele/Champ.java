@@ -38,7 +38,7 @@ public class Champ extends Polygon {
 		int i = 0;
 		for (i = 0; i < 6; i++) {
 			// On enregistre les sommets de l'hexagone
-			coordonnesPointsDuChamp[i] = new Point(pPoint.getX() + TerrainModele.r * Math.cos(i * 2 * Math.PI / 6), pPoint.getY() + TerrainModele.r * Math.sin(i * 2 * Math.PI / 6));
+			coordonnesPointsDuChamp[i] = new Point(pPoint.getX() + TerrainModele.r * (float)Math.cos(i * 2 * Math.PI / 6), pPoint.getY() + TerrainModele.r * (float)Math.sin(i * 2 * Math.PI / 6));
 			
 			this.addPoint(
 				(int)(pPoint.getX() + TerrainModele.r * Math.cos(i * 2 * Math.PI / 6)),
@@ -79,8 +79,8 @@ public class Champ extends Polygon {
 		x = Math.cos(a) * (pPoint.getX() - pPointCentre.getX()) - Math.sin(a) * (pPoint.getY() - pPointCentre.getY()) + pPointCentre.getX();
 		y = Math.sin(a) * (pPoint.getX() - pPointCentre.getX()) + Math.cos(a) * (pPoint.getY() - pPointCentre.getY()) + pPointCentre.getY();
 		
-		point.setX(x);
-		point.setY(y);
+		point.setX((float)x);
+		point.setY((float)y);
 		return point;
 	}
 	

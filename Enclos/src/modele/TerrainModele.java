@@ -1,5 +1,6 @@
 package modele;
  
+import java.awt.Color;
 import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.Observable;
@@ -11,7 +12,12 @@ public class TerrainModele extends Observable{
 	
 	public static final int r = 24;
 	static final int d = (int)(2.76 * r);
-	static final int niveau = 3;
+	static final int niveau = 2;
+	static Color colorJ1 = Color.red;
+	static Color colorJ2 = Color.blue;
+	static Color colorJ3 = Color.yellow;
+	static Color colorJ4 = Color.black;
+	public static final Color colorTerrain = Color.green;
 	
 	private Point centre = new Point(300, 300);
 	private ArrayList<Champ> arChamps = new ArrayList<Champ>();
@@ -21,8 +27,8 @@ public class TerrainModele extends Observable{
 	
 	public void ajouterJoueur()
 	{
-		Joueur joueur = new Joueur("FORSAIN", "Jean-Luc");
-		Joueur joueur2 = new Joueur("KHAO", "Kévin");
+		Joueur joueur = new Joueur("FORSAIN", "Jean-Luc", colorJ1);
+		Joueur joueur2 = new Joueur("KHAO", "Kévin", colorJ2);
 		
 		this.arJoueurs.add(joueur);
 		this.arJoueurs.add(joueur2);
@@ -244,12 +250,12 @@ public class TerrainModele extends Observable{
 		{
 			if(i%2 == 0)
 			{
-				arJoueurs.get(0).ajouterMouton(new Mouton(arChamps.get(i).getCentre()));
+				arJoueurs.get(0).ajouterMouton(new Mouton(arChamps.get(i).getCentre(), arJoueurs.get(0).getColor()));
 				arChamps.get(i).setAUnJoueur(true);
 			}
 			else
 			{
-				arJoueurs.get(1).ajouterMouton(new Mouton(arChamps.get(i).getCentre()));
+				arJoueurs.get(1).ajouterMouton(new Mouton(arChamps.get(i).getCentre(), arJoueurs.get(1).getColor()));
 				arChamps.get(i).setAUnJoueur(true);
 			}
 		}
@@ -515,5 +521,11 @@ public class TerrainModele extends Observable{
 		}
 		
 		return fondNoir;
+	}
+
+	public void notifierVues()
+	{
+		setChanged();
+		notifyObservers();
 	}
 }

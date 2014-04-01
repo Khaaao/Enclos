@@ -1,4 +1,5 @@
 package modele;
+import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -14,15 +15,27 @@ public class Joueur {
 	private boolean aChoisiMouton;
 	private boolean aDeplacerMouton;
 	private boolean aChoisiBarriere;
+	private boolean aPerdu;
+	private Color color;
 	static int idJoueur = 0;
 	private int id;
 
-	public Joueur(String nom, String prenom) {
+	public Joueur(String nom, String prenom, Color color) {
 	
 		this.nom = nom;
 		this.prenom = prenom;
 		this.estActif = false;
 		this.id = ++idJoueur;
+		this.aPerdu = false;
+		this.color = color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+	public Color getColor() {
+		return color;
 	}
 
 	public void ajouterMouton(Mouton mouton)

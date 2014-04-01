@@ -19,9 +19,6 @@ public class PlateauJeu extends JPanel{
 	
 	public void paintComponent(Graphics graphics)
 	{
-		
-		
-		
 		// Hexagones 
 		super.paintComponent(graphics);
 		
@@ -29,7 +26,7 @@ public class PlateauJeu extends JPanel{
 		graphics.setColor(Color.BLACK);
 		graphics.fillPolygon(this.modele.fondNoir());
 		
-		graphics.setColor(Color.GREEN);
+		graphics.setColor(TerrainModele.colorTerrain);
 		for(int i = 0; i < modele.getArChamps().size(); i++)
 			graphics.fillPolygon(modele.getArChamps().get(i));
 		
@@ -51,10 +48,7 @@ public class PlateauJeu extends JPanel{
 		{
 			for(int j= 0; j < modele.getArJoueurs().get(i).getListeMoutons().size(); j++)
 			{
-				if(modele.getArJoueurs().get(i).getId() == 1)
-					graphics.setColor(Color.ORANGE);
-				else
-					graphics.setColor(Color.RED);
+				graphics.setColor(modele.getArJoueurs().get(i).getListeMoutons().get(j).getColor());
 				drawCircle(graphics, modele.getArJoueurs().get(i).getListeMoutons().get(j).getCentre());
 			}
 		}

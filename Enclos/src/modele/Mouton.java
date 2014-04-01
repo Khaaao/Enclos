@@ -1,14 +1,25 @@
 package modele;
+import java.awt.Color;
 import java.awt.Polygon;
  
 
 public class Mouton extends Polygon{
 	
 	private Point centre;
+	private Color color;
 
-	public Mouton(Point pPoint)
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+	public Mouton(Point pPoint, Color color)
 	{
 		this.centre = pPoint;
+		this.color = color;
 	}
 	
 	public Point getCentre() {

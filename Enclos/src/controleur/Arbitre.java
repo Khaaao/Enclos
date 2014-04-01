@@ -1,5 +1,8 @@
 package controleur;
+import java.awt.Color;
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import modele.*;
 
@@ -7,12 +10,42 @@ public class Arbitre {
 
 	private TerrainModele modele;
 	private int indiceDuMoutonChosi;
+	private Timer timer;
 	
 	public Arbitre(TerrainModele pModele)
 	{
 		this.modele = pModele;
 	}
 	
+	public void faitClignoterMoutonSelectionneDuJoueur(Joueur joueurCourant)
+	{
+		final Color colorSave = joueurCourant.getColor();
+		final Joueur joueur = joueurCourant;
+		System.out.println(indiceDuMoutonChosi);
+		this.timer = new Timer();
+		timer.schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				if(joueur.getListeMoutons().get(indiceDuMoutonChosi).getColor() != TerrainModele.colorTerrain)
+					joueur.getListeMoutons().get(indiceDuMoutonChosi).setColor(TerrainModele.colorTerrain);
+				else
+					joueur.getListeMoutons().get(indiceDuMoutonChosi).setColor(colorSave);
+				
+				modele.notifierVues();
+			}
+		}, 0, 1000);
+		
+	}
+
+	public void arreteClignotementMoutonSelectionDuJoueur(Joueur joueurCourant)
+	{
+		timer.cancel();
+		for(Mouton mouton : joueurCourant.getListeMoutons())
+			mouton.setColor(joueurCourant.getColor());
+		modele.notifierVues();
+	}
 	public void abandon(Joueur joueur)
 	{
 		
@@ -55,12 +88,6 @@ public class Arbitre {
 	}
 	
 	public void sauvegarderPartie(File file)
-	{
-		
-	}
-	
-	
-	public void setJoueurs()
 	{
 		
 	}
@@ -115,10 +142,28 @@ public class Arbitre {
 	}
 	
 	public boolean verifieSiFinDePartie()
-	{
+	{	
 		boolean finDePartie = false;
 		return finDePartie;
 	}
 	
+	public void proposerRejouer()
+	{
+		
+	}
 	
+	public void virePionsJoueurQuiAPerdu()
+	{
+		
+	}
+	
+	public void lanceLaPartie()
+	{
+		
+	}
+	
+	public void maintienPartie()
+	{
+		
+	}
 }

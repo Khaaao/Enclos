@@ -28,6 +28,7 @@ public class TerrainControleur {
 					this.arbitre.valideEtapes(etape, joueur);
 					this.arbitre.sauvegardeIndiceMoutonADeplacer(terrainModele.pickMouton(joueur, x, y));
 					System.out.println("Mouton sélectionné");
+					this.arbitre.faitClignoterMoutonSelectionneDuJoueur(joueur);
 				}
 				else if(terrainModele.pickMouton(joueur, x, y) == -1)
 					System.out.println("Vous n'avez pas sélectionné un de vos moutons");
@@ -38,6 +39,7 @@ public class TerrainControleur {
 			case 2:
 				if(terrainModele.pickVoisin(joueur, this.arbitre.getSauvegardeIndiceMoutonADeplacer(), x, y) == 1)
 				{
+					this.arbitre.arreteClignotementMoutonSelectionDuJoueur(joueur);
 					this.arbitre.valideEtapes(etape, joueur);
 					System.out.println("Déplacement validé");
 				}

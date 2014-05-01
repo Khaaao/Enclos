@@ -12,7 +12,7 @@ public class TerrainModele extends Observable{
 	
 	public static final int r = 24;
 	static final int d = (int)(2.76 * r);
-	static final int niveau = 2;
+	static final int niveau = 3;
 	static Color colorJ1 = Color.red;
 	static Color colorJ2 = Color.blue;
 	static Color colorJ3 = Color.yellow;
@@ -314,7 +314,7 @@ public class TerrainModele extends Observable{
 				{
 					// Le centre du mouton du joueur est mis à jour
 					joueurCourant.getListeMoutons().get(indiceMoutonChoisi).setCentre(arChamps.get(indiceARetenir).getVoisins().get(l).getCentre());
-					// On met à jour le tableau de champ en précisant que la nouvelle case est occupe par un joueur et que l'ancienne est libre
+					// On met à jour le tableau de champ en précisant que l'ancienne est libre
 					arChamps.get(indiceARetenir).setAUnJoueur(false);
 					arChamps.get(recuperationIndice(arChamps.get(indiceARetenir).getVoisins().get(l).getCentre())).setAUnJoueur(true);
 					
@@ -322,7 +322,7 @@ public class TerrainModele extends Observable{
 					notifyObservers();
 					
 					majMouton = true;
-					resultat = 1; // Tout est OK
+					resultat = 1; // Tout est OK, on récupère l'indice du mouton du joueur
 				}
 				else
 				{
@@ -420,21 +420,11 @@ public class TerrainModele extends Observable{
 		return arChamps;
 	}
 
-	public void setArChamps(ArrayList<Champ> arChamps) {
-		this.arChamps = arChamps;
-		setChanged();
-		notifyObservers();
-	}
 
 	public ArrayList<Joueur> getArJoueurs() {
 		return arJoueurs;
 	}
 
-	public void setArJoueurs(ArrayList<Joueur> arJoueurs) {
-		this.arJoueurs = arJoueurs;
-		setChanged();
-		notifyObservers();
-	}
 
 	public boolean moutonBloque(Point pPoint)
 	{

@@ -40,6 +40,7 @@ public class TerrainControleur {
 				if(terrainModele.pickVoisin(joueur, this.arbitre.getSauvegardeIndiceMoutonADeplacer(), x, y) == 1)
 				{
 					this.arbitre.arreteClignotementMoutonSelectionDuJoueur(joueur);
+//					this.arbitre.faitTransiterMouton(joueur, terrainModele.pickVoisin(joueur, this.arbitre.getSauvegardeIndiceMoutonADeplacer(), x, y));
 					this.arbitre.valideEtapes(etape, joueur);
 					System.out.println("Déplacement validé");
 				}

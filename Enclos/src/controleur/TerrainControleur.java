@@ -16,10 +16,12 @@ public class TerrainControleur {
 	}
 	
 	
+	// Méthode qui teste les 3 étapes d'un joueur en fonction du clic
 	public void click(int x, int y)
 	{
 		Joueur joueur = this.arbitre.getJoueurActif();
 		int etape = this.arbitre.checkEtapesJoueur(joueur);
+		
 		switch(etape)
 		{
 			case 1:
@@ -40,7 +42,6 @@ public class TerrainControleur {
 				if(terrainModele.pickVoisin(joueur, this.arbitre.getSauvegardeIndiceMoutonADeplacer(), x, y) == 1)
 				{
 					this.arbitre.arreteClignotementMoutonSelectionDuJoueur(joueur);
-//					this.arbitre.faitTransiterMouton(joueur, terrainModele.pickVoisin(joueur, this.arbitre.getSauvegardeIndiceMoutonADeplacer(), x, y));
 					this.arbitre.valideEtapes(etape, joueur);
 					System.out.println("Déplacement validé");
 				}
@@ -65,6 +66,14 @@ public class TerrainControleur {
 			break;
 			
 			default:
+			break;
+		}
+		
+		// Vérification si la partie est finie
+		if(this.arbitre.verifieSiFinDePartie())
+		{
+			System.out.println("La partie est terminée.");
+			this.arbitre.proposerRejouer();
 		}
 			
 	}

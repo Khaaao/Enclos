@@ -39,37 +39,6 @@ public class Arbitre {
 		
 	}
 	
-//	public void faitTransiterMouton(Joueur joueur, int indiceBut)
-//	{
-//		//1. On récupère le centre du mouton de départ
-//		int indiceARetenir = this.modele.recuperationIndice(joueur.getListeMoutons().get(this.indiceDuMoutonChosi).getCentre());
-//		Point pointDepart = new Point(this.modele.getArChamps().get(indiceARetenir).getCentre().getX(), this.modele.getArChamps().get(indiceARetenir).getCentre().getY());
-//		
-//		//2. On récupère le centre de l'hexgaone du point d'arrivée
-//		Champ champ;
-//		champ = this.modele.getArChamps().get(this.modele.recuperationIndice(this.modele.getArChamps().get(indiceARetenir).getVoisins().get(indiceBut).getCentre()));
-//		int xF = (int)champ.getCentre().getX();
-//		int yF = (int)champ.getCentre().getY();
-//		
-//		//3. On définit nos variables de transition
-//		int xD = (int)pointDepart.getX(), yD = (int)pointDepart.getY();
-//		
-//		while(xD < xF || yD < yF)
-//		{
-//			++xD;
-//			++yD;
-//			Point point = new Point(xD, yD);
-//			joueur.getListeMoutons().get(indiceARetenir).setCentre(point);
-//			try{
-//				Thread.sleep(1);
-//				modele.notifierVues();
-//			}catch(InterruptedException e)
-//			{
-//				e.printStackTrace();
-//			}
-//		}
-//	}
-	
 	public void arreteClignotementMoutonSelectionDuJoueur(Joueur joueurCourant)
 	{
 		timer.cancel();
@@ -84,11 +53,6 @@ public class Arbitre {
 	
 	public void annulerCoup(Joueur joueur)
 	{
-		
-	}
-	
-	public void changerJoueur()
-	{ 
 		
 	}
 	
@@ -174,7 +138,22 @@ public class Arbitre {
 	
 	public boolean verifieSiFinDePartie()
 	{	
+		int nbreJoueurs = this.modele.getNbreJoueurs();
+		int nbreDeJoueursAyantPerdu = 0;
 		boolean finDePartie = false;
+		
+		// 1. Appel de la méthode qui va checker si les moutons de chaque joueur sont bloqués
+		this.modele.bilanTour();
+		// 2. L'arbitre aura juste a voir si l'attr. aPerdu est vrai pout incrémenter nbreDeJoueursAyantPerdu
+		for(Joueur joueur : this.modele.getArJoueurs())
+		{
+			if(joueur.getAPerdu())
+				nbreDeJoueursAyantPerdu++;
+		}
+		
+		if(nbreDeJoueursAyantPerdu == nbreJoueurs - 1)
+			finDePartie = true;
+		
 		return finDePartie;
 	}
 	

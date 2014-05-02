@@ -16,6 +16,15 @@ public class Joueur {
 	private boolean aDeplacerMouton;
 	private boolean aChoisiBarriere;
 	private boolean aPerdu;
+	
+	public boolean getAPerdu() {
+		return aPerdu;
+	}
+
+	public void setAPerdu(boolean aPerdu) {
+		this.aPerdu = aPerdu;
+	}
+
 	private Color color;
 	static int idJoueur = 0;
 	private int id;

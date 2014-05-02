@@ -426,6 +426,7 @@ public class TerrainModele extends Observable{
 	}
 
 
+	// Méthode vérifiant si un mouton est bloqué ou non
 	public boolean moutonBloque(Point pPoint)
 	{
 		//1. On cherche le champ corespondant au centre du mouton
@@ -517,5 +518,35 @@ public class TerrainModele extends Observable{
 	{
 		setChanged();
 		notifyObservers();
+	}
+	
+	// Méthode retournant le nbre de joueurs
+	public int getNbreJoueurs()
+	{
+		int nbreJ = 0;
+		for(Joueur joueur : arJoueurs)
+			nbreJ++;
+		
+		return nbreJ;
+	}
+	
+	// Méthode vériiant si les joueurs continuent de jouer ou pas
+	public void bilanTour()
+	{
+		int m = 0;
+		
+		for(Joueur joueur : arJoueurs)
+		{
+			// On vérfie si tous les moutons du joueur sont bloqués
+			for(Mouton mouton : joueur.getListeMoutons())
+			{
+				if(moutonBloque(mouton.getCentre()))
+					m++;
+			}
+			if (m == joueur.getListeMoutons().size())
+				joueur.setAPerdu(true);
+			
+			m = 0;
+		}
 	}
 }

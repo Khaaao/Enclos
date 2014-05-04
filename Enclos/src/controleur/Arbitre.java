@@ -45,27 +45,6 @@ public class Arbitre {
 			mouton.setColor(joueurCourant.getColor());
 		modele.notifierVues();
 	}
-	public void abandon(Joueur joueur)
-	{
-		
-	}
-	
-	public void annulerCoup(Joueur joueur)
-	{
-		
-	}
-	
-	public void chargerPartie(File fichier)
-	{
-		
-	}
-	
-	
-	public void illumineMouvementObligatoire()
-	{
-		
-	}
-	
 	
 	public Joueur getJoueurActif()
 	{
@@ -74,16 +53,6 @@ public class Arbitre {
 				return joueur;
 		
 		return null;
-	}
-	
-	public void nouvellePartie()
-	{
-		
-	}
-	
-	public void sauvegarderPartie(File file)
-	{
-		
 	}
 	
 	public int checkEtapesJoueur(Joueur joueur)
@@ -154,25 +123,5 @@ public class Arbitre {
 			finDePartie = true;
 		
 		return finDePartie;
-	}
-	
-	public void proposerRejouer()
-	{
-		
-	}
-	
-	public void virePionsJoueurQuiAPerdu()
-	{
-		
-	}
-	
-	public void lanceLaPartie()
-	{
-		
-	}
-	
-	public void maintienPartie()
-	{
-		
 	}
 }

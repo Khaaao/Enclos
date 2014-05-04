@@ -16,6 +16,9 @@ public class Joueur {
 	private boolean aDeplacerMouton;
 	private boolean aChoisiBarriere;
 	private boolean aPerdu;
+	private Color color;
+	static int idJoueur = 0;
+	private int id;
 	
 	public boolean getAPerdu() {
 		return aPerdu;
@@ -25,9 +28,7 @@ public class Joueur {
 		this.aPerdu = aPerdu;
 	}
 
-	private Color color;
-	static int idJoueur = 0;
-	private int id;
+	
 
 	public Joueur(String nom, String prenom, Color color) {
 	
@@ -58,10 +59,6 @@ public class Joueur {
 
 	public String getPrenom() {
 		return prenom;
-	}
-
-	public void setListeMoutons(ArrayList<Mouton> listeMoutons) {
-		this.listeMoutons = listeMoutons;
 	}
 	
 	public boolean isEstActif() {

@@ -1,29 +1,30 @@
 package vue;
- 
-import java.util.Observable;
-import java.util.Observer;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.MenuBar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 
+import modele.TerrainModele;
 import controleur.TerrainControleur;
 
-public class Terrain extends JFrame implements Observer, MouseListener, KeyListener{
+public class NewMenu extends JFrame implements ActionListener{
 	
-	private PlateauJeu plateauJeu;
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu menu1 = new JMenu("Fichier");
 	private JMenu menu2 = new JMenu("Edit");
 	private JMenu menu3 = new JMenu("Affichage");
 	private JMenu menu4 = new JMenu("A propos");
+	private JLabel icon_ = new JLabel(new ImageIcon("images/menu_principal.jpg"));
 	
 	private JMenuItem menuitem1 = new JMenuItem("Nouvelle partie");
 	private JMenuItem menuitem2 = new JMenuItem("Sauvegarder partie");
@@ -36,24 +37,21 @@ public class Terrain extends JFrame implements Observer, MouseListener, KeyListe
 	private JMenuItem menuitem9 = new JMenuItem("?");
 	private JMenuItem menuitem10 = new JMenuItem("Partie rapide");
 	
-	// Instance de l'objet controleur
-	private TerrainControleur controleur;
-	public Terrain(TerrainControleur pControleur)
+	public NewMenu()
 	{
-		
 		this.setSize(700, 750);
-		this.setTitle("Jeu de l'enclos");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLocationRelativeTo(null);
-		this.setResizable(false);
-		this.controleur = pControleur;
-		this.plateauJeu = new PlateauJeu(controleur.getTerrainModele());
-		
-		this.setContentPane(plateauJeu);
-		this.addMouseListener(this);
-		this.addKeyListener(this);
-		
-		this.menu1.add(menuitem10);
+		this.setTitle("Jeu de l'enclos");
+	    this.setLocationRelativeTo(null);
+	    this.setResizable(false);
+	    
+	    JPanel panIcon = new JPanel();
+	    panIcon.setLayout(new BorderLayout());
+	    panIcon.setBackground(Color.WHITE);
+	    panIcon.add(icon_);
+	    
+	    
+	    this.menu1.add(menuitem10);
 	    this.menu1.add(menuitem1);
 	    this.menu1.add(menuitem2);
 	    this.menu1.add(menuitem3);
@@ -73,10 +71,21 @@ public class Terrain extends JFrame implements Observer, MouseListener, KeyListe
 	    this.menuBar.add(menu3);
 	    this.menuBar.add(menu4);
 	    
+	    this.menuitem2.setEnabled(false);
+	    
 	    this.setJMenuBar(menuBar);
 	    
 	    
 	    // Les ActionListener
+	    menuitem1.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+	    
 	    menuitem5.addActionListener(new ActionListener() {
 			
 			@Override
@@ -91,67 +100,30 @@ public class Terrain extends JFrame implements Observer, MouseListener, KeyListe
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				creationTerrain();
 			}
 		});
-		
-		
-		
-		this.setVisible(true);
+	    
+	    this.getContentPane().add(panIcon, BorderLayout.CENTER);
+	    this.setVisible(true);
+	}
+
+	protected void creationTerrain() {
+		// TODO Auto-generated method stub
+		// Instanciation du modèle 
+		TerrainModele modele = new TerrainModele();
+		// Création du controleur lié au modèle
+		TerrainControleur controleur = new TerrainControleur(modele);
+		// Création de la fenetre avec le controleur en param
+		Terrain terrain = new Terrain(controleur);
+		// Ajout de la fenetre comme observer de notre modèle
+		modele.addObserver(terrain);
+		setVisible(false); 
 	}
 
 	@Override
-	public void keyTyped(KeyEvent e) {
+	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		int x = e.getX();
-		int y = e.getY()-25;
-		controleur.click(x, y);
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
-		repaint();
 	}
 }

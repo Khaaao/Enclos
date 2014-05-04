@@ -21,7 +21,6 @@ public class Arbitre {
 	{
 		final Color colorSave = joueurCourant.getColor();
 		final Joueur joueur = joueurCourant;
-		System.out.println(indiceDuMoutonChosi);
 		this.timer = new Timer();
 		timer.schedule(new TimerTask() {
 			

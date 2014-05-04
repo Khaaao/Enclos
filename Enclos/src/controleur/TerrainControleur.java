@@ -31,6 +31,7 @@ public class TerrainControleur {
 					this.arbitre.sauvegardeIndiceMoutonADeplacer(terrainModele.pickMouton(joueur, x, y));
 					System.out.println("Mouton sélectionné");
 					this.arbitre.faitClignoterMoutonSelectionneDuJoueur(joueur);
+					this.arbitre.illumineMouvementObligatoire();
 				}
 				else if(terrainModele.pickMouton(joueur, x, y) == -1)
 					System.out.println("Vous n'avez pas sélectionné un de vos moutons");

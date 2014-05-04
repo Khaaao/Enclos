@@ -19,7 +19,7 @@ public class TerrainModele extends Observable{
 	static Color colorJ4 = Color.black;
 	public static final Color colorTerrain = Color.green;
 	
-	private Point centre = new Point(300, 300);
+	private Point centre = new Point(350, 375);
 	private ArrayList<Champ> arChamps = new ArrayList<Champ>();
 	private ArrayList<Joueur> arJoueurs = new ArrayList<Joueur>();
 	private ArrayList<Point> arPoints = new ArrayList<Point>();
@@ -499,10 +499,10 @@ public class TerrainModele extends Observable{
 	public Polygon fondNoir()
 	{
 		Polygon fondNoir = new Polygon();
-		Point point = new Point(300, 300);
+		Point point = new Point(350, 375);
 		int angle = 0;
-		int distance = 300 - TerrainModele.d * (niveau+1);
-		Point pointDepart = new Point(300, distance);
+		int distance = 375 - TerrainModele.d * (niveau+1);
+		Point pointDepart = new Point(350, distance);
 		Point stock;
 		for(int i =0; i < 6; i++)
 		{
